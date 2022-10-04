@@ -1,0 +1,9 @@
+(At MVC)
+
+-- python manage.py runserver
+-- python manage.py startapp (app name) - Used to create new apps.
+
+-- Download DBServer for SQLite.
+
+-- python manage.py migrate - Sends migrations to sqlite database in app indistinctly.
+-- python manage,py makemigartions  (appname) - Sends migrations that involve user changes only.
