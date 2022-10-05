@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 
 # Create your models here.
@@ -11,11 +12,10 @@ class Teacher(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return f"{self.name}, school id: {self.schoolid} | e-mail: {self.email}"
+        return f"{self.name}, school id: {self.schoolid}"
 
 class Student(models.Model):
     name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=40)
     parentphonenum = models.CharField(max_length=10)
     gender = models.CharField(max_length=1)
     birthdate = models.DateField()
@@ -37,21 +37,13 @@ class Subject(models.Model):
         return f"{self.name}, nrc: {self.nrc}"
 
 class Course(models.Model):
-    gradenumber = models.IntegerField()
-    teacher = models.ManyToManyField(Teacher)
-    student = models.ManyToManyField(Student)
-    subject = models.ManyToManyField(Subject)
+    coursenumber = models.IntegerField()
+    teacher = models.ForeignKey("Teacher", on_delete=models.CASCADE)
+    student = models.ForeignKey("Student", on_delete=models.CASCADE)
+    subject = models.ForeignKey("Subject", on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['gradenumber']
+        ordering = ['coursenumber']
     
     def get_all_courses(self):
         return Course.objects.select_related('Student', 'Subject', 'Teacher')
-
-
-
-    
-
-
-
-
