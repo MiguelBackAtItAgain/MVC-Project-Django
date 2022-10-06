@@ -1,0 +1,26 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Students at William Caxton College</title>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td><strong>Student name</strong></td>
+                <td><strong>Parents' phone number</strong></td>
+                <td><strong>Gender</strong></td>
+                <td><strong>Birthdate</strong></td>
+            </tr>
+            {%for student in students%}
+            <tr>
+                <td>{{student.name}}</td>
+                <td>{{student.parentphonenum}}</td>
+                <td>{{student.gender}}</td>
+                <td>{{student.birthdate}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+
+</html>
