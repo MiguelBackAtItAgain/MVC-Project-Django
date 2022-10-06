@@ -1,3 +1,8 @@
+(General commands)
+
+-- django-admin startproject (project name)
+-- python manage.py startapp (app name)
+
 (At MVC)
 
 -- python manage.py runserver
@@ -5,5 +10,9 @@
 
 -- Download DBServer for SQLite.
 
--- python manage.py migrate - Sends migrations to sqlite database in app indistinctly.
--- python manage,py makemigartions  (appname) - Sends migrations that involve user changes only.
+-- python manage,py makemigrations  (appname) - Sends migrations that involve user changes only.
+-- python manage.py migrate (appname) - Sends migrations to sqlite database after executing makemigartions.
+
+(Final steps: creating a super user)
+
+-- python manage.py createsuperuser
