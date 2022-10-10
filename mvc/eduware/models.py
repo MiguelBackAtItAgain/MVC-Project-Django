@@ -1,4 +1,3 @@
-from email.policy import default
 from django.db import models
 
 # Create your models here.
@@ -18,6 +17,7 @@ class Student(models.Model):
     name = models.CharField(max_length=100)
     parentphonenum = models.CharField(max_length=10)
     gender = models.CharField(max_length=1)
+    password = models.CharField(max_length=20)
     birthdate = models.DateField()
 
     class Meta:
