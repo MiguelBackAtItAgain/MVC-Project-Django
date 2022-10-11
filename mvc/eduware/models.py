@@ -6,6 +6,7 @@ class Teacher(models.Model):
     name = models.CharField(max_length=100)
     schoolid = models.CharField(max_length=5)
     personalid = models.CharField(max_length=10)
+    email = models.EmailField(default='error@notcorrectlygenerated.com')
 
     class Meta:
         ordering = ['name']
@@ -19,6 +20,7 @@ class Student(models.Model):
     gender = models.CharField(max_length=1)
     password = models.CharField(max_length=20)
     birthdate = models.DateField()
+    email = models.EmailField(default='error@notcorrectlygenerated.com')
 
     class Meta:
         ordering = ['name']
