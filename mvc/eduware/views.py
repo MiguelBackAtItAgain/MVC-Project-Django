@@ -1,8 +1,9 @@
 from contextlib import _RedirectStream
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from .models import Teacher as t, Student as s
 from .forms import StudentUploadForm, StudentLoginForm
-""""We import the UserCreationForm in order for it to be used in the Register method"""
+""""We import the UserCreationForm and StudentLoginForm in order for it to be used in the Register method"""
 
 # Create your views here.
 def teachers_list(request):
@@ -30,5 +31,7 @@ def login(request):
     if request.POST:
         form = StudentLoginForm(request.POST)
         if form.is_valid:
-            return render(request, "eduware/welcome.html")
+            email = request.POST['email']
+            password = request.POST['password']
+            print(email, password)
     return render(request, "eduware/login.html",{'form' : StudentLoginForm } )
