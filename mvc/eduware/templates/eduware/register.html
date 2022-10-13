@@ -1,5 +1,43 @@
 <form method="POST" action="{% url 'register' %}" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ form.as_p }}
+    <div class="col">
+        <div class="col">
+            Name
+        </div>
+        <div class="col">
+            {{form.name}}
+        </div>
+        <div class="col">
+            Parent's phone number
+        </div>
+        <div class="col">
+            {{form.parentphonenum}}
+        </div>
+        <div class="col">
+            Gender
+        </div>
+        <div class="col">
+            {{form.gender}}
+        </div>
+        <div class="col">
+            Birthdate
+        </div>
+        <div class="col">
+            {{form.birthdate}}
+        </div>
+        <div class="col">
+            E-mail
+        </div>
+        <div class="col">
+            {{form.email}}
+        </div>
+        <div class="col">
+            Password
+        </div>
+        <div class="col">
+            {{form.password}}
+        </div>
+    </div>
+    <p></p>
     <button>Submit</button>
 </form>

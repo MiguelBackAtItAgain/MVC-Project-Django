@@ -12,3 +12,10 @@ class StudentUploadForm(ModelForm):
     class Meta:
         model = s
         fields = ['name', 'parentphonenum', 'gender', 'birthdate', 'email', 'password']
+
+class StudentLoginForm(ModelForm):
+    email = forms.EmailField()
+    password = forms.TextInput()
+    class Meta:
+        model = s
+        fields = ['email', 'password']
