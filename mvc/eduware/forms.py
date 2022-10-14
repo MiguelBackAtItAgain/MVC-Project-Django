@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
-from .models import Student as s
+from .models import Student as s, StudentSession as ss
+
 
 class StudentUploadForm(ModelForm):
     name = forms.TextInput()
@@ -19,3 +20,24 @@ class StudentLoginForm(ModelForm):
     class Meta:
         model = s
         fields = ['email', 'password']
+
+class StudentSessionForm(ModelForm):
+    session_state = forms.TextInput()
+    alternate_id = forms.IntegerField()
+    date = forms.DateField()
+    student = forms.IntegerField()
+
+    def __init__(self, state, alt_id, date, student):
+        self.session_state = state
+        self.alternate_id = alt_id
+        self.date = date,
+        self.student = student
+        
+    class Meta:
+        model = ss
+        fields = ['session_state', 'alternate_id', 'date', 'student']
+
+
+        
+        
+
