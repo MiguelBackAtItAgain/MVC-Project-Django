@@ -32,7 +32,7 @@ class StudentSessionForm(ModelForm):
         self.alternate_id = alt_id
         self.date = date,
         self.student = student
-        
+        super().__init__()
     class Meta:
         model = ss
         fields = ['session_state', 'alternate_id', 'date', 'student']
