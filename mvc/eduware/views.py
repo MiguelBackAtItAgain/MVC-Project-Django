@@ -2,11 +2,11 @@ from contextlib import _RedirectStream
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import Teacher as t, Student as s, StudentSession as ss
-from .forms import StudentSessionForm, StudentUploadForm, StudentLoginForm
+from .forms import StudentUploadForm, StudentLoginForm
 import random
 from datetime import date
 
-""""We import the UserCreationForm and StudentLoginForm in order for it to be used in the Register method"""
+""""We import the UserCreationForm in order for it to be used in the Register method"""
 
 # Create your views here.
 def teachers_list(request):
@@ -27,11 +27,10 @@ def welcome(request):
         return render(request, "eduware/error_view.html")
 
 def register(request):
-
     if request.POST:
         form = StudentUploadForm(request.POST)
         if form.is_valid():
-            print(request.POST)   
+            print(request.POST)
             form.save()
             return redirect('student_login')
     form = StudentUploadForm(request.POST)
