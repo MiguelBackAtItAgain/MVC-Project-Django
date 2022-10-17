@@ -1,0 +1,8 @@
+{% load static %}
+
+<html>
+    <dl>
+        {% csrf_token %}
+        <a href="{% url 'student_logout' %}">Log out</a>
+    </dl>
+</html>

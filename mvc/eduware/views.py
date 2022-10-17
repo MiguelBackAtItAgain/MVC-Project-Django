@@ -7,7 +7,7 @@ from .forms import StudentUploadForm, StudentLoginForm
 import random
 from datetime import date
 
-""""We import the UserCreationForm in order for it to be used in the Register method"""
+""""We import the UserCreationForm and User model in order for them to be used in the Register method"""
 
 # Create your views here.
 def teachers_list(request):
@@ -58,6 +58,10 @@ def student_login(request):
     if request.user.is_authenticated:
         return redirect('welcome')
     return render(request, "eduware/student_login.html",{'form' : StudentLoginForm } )
+
+def student_logout(request):
+    logout(request)
+    return redirect('student_login')
 
 def error(request):
     return render(request, "eduware/error")
