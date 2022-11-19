@@ -3,6 +3,7 @@ from django.db import models
 from datetime import date
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import AbstractUser
+from django import forms
 
 # Create your models here.
 
@@ -28,14 +29,14 @@ class Subject(models.Model):
         ordering = ['name']
 
     def __str__(self):
-        return f"{self.name}, nrc: {self.nrc}"
+        return f"{self.name}"
 
 
 class Course(models.Model):
     id = models.AutoField(primary_key=True)
     coursenumber = models.IntegerField()
     parallel = models.CharField(max_length=1)
-    teacher = models.ForeignKey("User", on_delete=models.CASCADE)
+    teacher = models.ForeignKey("User", on_delete=models.CASCADE, limit_choices_to= {'groups__name': "Teacher"})
     subject = models.ForeignKey("Subject", on_delete=models.CASCADE)
 
     class Meta:
@@ -51,8 +52,10 @@ class SchoolClass(models.Model):
 
 class StudentList(models.Model):
     id = models.AutoField(primary_key=True)
-    student = models.ForeignKey("User", on_delete=models.CASCADE)
+    student = models.ForeignKey("User",  on_delete=models.CASCADE, limit_choices_to= {'groups__name': "Student"})
     schoolclass = models.ForeignKey("SchoolClass", on_delete=models.CASCADE)
+    def __unicode__(self):
+        return u'%s %s' 
 
     class Meta:
         ordering = ['id']
