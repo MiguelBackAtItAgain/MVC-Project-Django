@@ -1,8 +1,14 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as ua
 from django import forms
-from .models import Subject as sb, Course as c, SchoolClass as sc, StudentList as sl, User as s
+
+from .models import Subject as sb, Course as c,  StudentCourse as sc, User as s
+from .forms import UserAdminCreationForm, UserAdminChangeForm
+
 # Register your models here.
+
+User = get_user_model()
 
 @admin.register(sb)
 class SubjectAdmin(admin.ModelAdmin):
@@ -25,13 +31,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = ('coursenumber', 'parallel', 'teacher', 'subject')
 
 @admin.register(sc)
-class ClassAdmin(admin.ModelAdmin):
-    
-    """Class admin"""
-    list_display = ('id', 'max_students')
-
-@admin.register(sl)
-class StudentListAdmin(admin.ModelAdmin):
+class StudentCourseAdmin(admin.ModelAdmin):
 
     class CustomModelChoiceField(forms.ModelChoiceField):
         def label_from_instance(self, obj):
@@ -40,32 +40,36 @@ class StudentListAdmin(admin.ModelAdmin):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'student':
             return self.CustomModelChoiceField(queryset=s.objects)
-        return super(StudentListAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
+        return super(StudentCourseAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
     
     """Student in class admin"""
-    list_display = ('id', 'student', 'schoolclass')
+    list_display = ('id', 'student')
+    
 
 ################################################################################
 
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(ua):
+    
+    form = UserAdminChangeForm
+    add_form = UserAdminCreationForm
 
+    list_display = ['email', 'admin']
+    list_filter = ['admin']
 
     fieldsets = (
-        (None, {
-            'fields': ('username', 'name','idnumber', 'address', 'email', 'phonenum', 'gender', 'birthdate', 'password')
-        }),
-        ('Permissions', {
-            'classes': ['wide'],
-            'fields': ('is_superuser', 'is_staff', 'is_active', 'groups')
-        }),
+        ('Student info', {'fields': ('email', 'password')}),
     )
 
-    list_display = ('name', 'email', 'gender', 'birthdate')
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields':('name', 'idnumber', 'address', 'email', 'phonenum', 'gender', 'birthdate', 'password', 'password_2')
+        }),
+        ('Permissions', {'fields': ('admin', 'groups',)}),
+    )
 
-    filter_horizontal = ('groups', 'user_permissions',)
+    search_fields = ['email']
+    ordering = ['email']
+    filter_horizontal = ('groups', 'user_permissions')
 
-
-
-
-admin.site.register(s, UserAdmin)
-
+admin.site.register(User, UserAdmin)
