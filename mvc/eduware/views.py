@@ -11,7 +11,15 @@ def loginUser(request):
         passw = request.POST.get('pass')
         user = authenticate(request, email=username, password=passw)
         if user is not None:
-            login(request, user)
+            group = None
+            if user.groups.exists():
+                group = user.groups.all()[0].name
+                if group == "Student":
+                    login(request, user)
+                    return redirect('student/home')
+                elif group == "Teacher":
+                    login(request, user)
+                    return redirect('teacher/home')
             return redirect('home')
         else:
             messages.error(request, "Bad credentials")
@@ -20,10 +28,15 @@ def loginUser(request):
         return render(request, 'eduware/login.html')
 
 @login_required
-def home(request):
-    return render(request, 'eduware/home.html')
+def studentLogin(request):
+    return render(request, 'eduware/studenthomepage.html')
+
+@login_required
+def teacherLogin(request):
+    return render(request, 'eduware/teacherhomepage.html')
 
 @login_required
 def logoutUser(request):
     logout(request)
     return render(request, 'eduware/login.html')
+

@@ -53,7 +53,7 @@ class UserAdmin(ua):
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
 
-    list_display = ['email', 'admin']
+    list_display = ['email']
     list_filter = ['admin']
 
     fieldsets = (
