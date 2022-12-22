@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
 
     def get_name(self):
-        return self.email
+        return self.name
     
     def __str__(self):
         return self.email
@@ -101,6 +101,9 @@ class Course(models.Model):
 
     class Meta:
         ordering = ['coursenumber']
+
+    def __str__(self):
+        return self.subject + ', ' + self.coursenumber + ' ' + self.parallel
 
 
 class StudentCourse(models.Model):
