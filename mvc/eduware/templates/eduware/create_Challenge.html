@@ -11,21 +11,84 @@
     </head>
     <body>
         {% include 'partials/_control_pannel.html'%}
-        <form method="POST" action="{% url 'createChallenge' %}?course={{ request.GET.course }}">
-            <div>
-                <tr>
-                    <h1>Create challenge</h1>
-                </tr>
-            </div>
-            <div>
+        <style>
+            table, th, td {
+              border:1px solid black;
+            }
+        </style>
+        <div>
+            <form method="POST" action="{% url 'createChallenge' %}?course={{ request.GET.course }}">
+                <div>
+                    <tr>
+                        <h1>Create challenge</h1>
+                    </tr>
+                </div>
+                <div>
                 {% csrf_token %}
-                <tr>
-                    {{ form.as_p }}
-                </tr>
-                <tr>
-                    <button>Create</button>
-                </tr>
-            </div>
-        </form>
+                <table>
+                    <tr>
+                        <td>
+                            Challenge title
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.title }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Description
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.description }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Answer
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.answer }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Start date
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.begin_date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            End date
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.end_date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ form.course }}
+                            <button>Create</button>
+                        </td>
+                    </tr>
+                </table>
+                </div>
+            </form>
+        </div>
+        <div>
+            <a href="{% url 'getChallenges' %}?course={{request.GET.course}}">Return</a>
+        </div>
+        
     </body>
 </html>

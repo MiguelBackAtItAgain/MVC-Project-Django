@@ -9,8 +9,44 @@
         <meta name="viewport" content="width=device-width, initial'scale=1">
         <link rel="stylesheet" href="../css/tables.css">
     </head>
+    
     <body>
             {% include 'partials/_control_pannel.html'%}
-            <a href="{% url 'createChallenge' %}?course={{ request.GET.course }}">Create a challenge for this class</a>
+            <style>
+                table, th, td {
+                  border:1px solid black;
+                }
+            </style>
+            <table>
+                <tr>
+                    <th>Course</th>
+                    <th>Parallel</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Answer</th>
+                </tr>
+                <tr>
+                    {% for var in challenge_info %}
+                    <tr>
+                        <td>{{var.course.coursenumber}} </td>
+                        <td>{{var.course.parallel}}</td>
+                        <td>{{var.title}} </td>
+                        <td>{{var.description}}</td>
+                        <td>{{var.answer}}</td>
+                    </tr>
+                    {% endfor %}
+                </tr>
+            </table>
+            <p></p>
+            <div>
+                <a href="{% url 'createChallenge' %}?course={{ request.GET.course }}">Create a challenge for this class</a>
+            </div>
+            <div>
+                <p></p>
+            </div>
+            <div>
+                <a href="{% url 'Teacher home page' %}">Home</a>
+            </div>
+
     </body>
 </html>

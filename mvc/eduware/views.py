@@ -60,7 +60,6 @@ def teacherLogin(request):
         course_list = Course.objects.filter(teacher_id = user.id)
         return render(request, 'eduware/teacherhomepage.html', {'teacher_course_data' : course_list})
 
-
 @login_required
 def getChallenges(request):
     course = request.GET.get('course')
@@ -77,7 +76,7 @@ def createChallenge(request):
                 form = ChallengeCreationForm(request.POST)
                 if form.is_valid():
                     form.save()
-                    return redirect('teacher/challenges')
+                    return render(request, 'eduware/view_challenges.html')
             form = ChallengeCreationForm(course_id=request.GET.get('course'))
             context = {'form' : form}
             return render(request, 'eduware/create_challenge.html', context)
