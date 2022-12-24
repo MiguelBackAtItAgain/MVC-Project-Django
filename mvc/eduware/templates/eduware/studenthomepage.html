@@ -7,15 +7,29 @@
         <title>Student's home page</title>
         <meta name="description" content="Welcome to the students' homepage.">
         <meta name="viewport" content="width=device-width, initial'scale=1">
+        <link rel="stylesheet" href="../css/tables.css">
     </head>
     <body>
         {% include 'partials/_control_pannel.html'%}
 
         <h1>Student's homepage</h1>
-        <ul>
-            {% for var in context %}
-                <li>{{ var.subject }}</li>
-            {% endfor %}
-        </ul>
+        <table>
+            <tr>
+                {% for var in course_data %}
+                <div>
+                    <tr>{{var.course.coursenumber}} </tr>
+                    <tr>{{var.course.parallel}}</tr>
+                </div>
+                <div>
+                    <tr>{{var.course.subject.name}} - </tr>
+                    <tr>{{var.course.teacher.name}}</tr>
+                </div>
+                <div>
+                    <a href="{% url 'getChallenges' coursenumber = coursenumber %}">See available challenges</a>
+                </div>
+                </br>
+                {% endfor %}
+            </tr>
+        </table>
     </body>
 </html>

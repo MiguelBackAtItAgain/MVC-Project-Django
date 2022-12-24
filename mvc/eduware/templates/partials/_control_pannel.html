@@ -2,7 +2,13 @@
 
 <html>
     <dl>
-        {% csrf_token %}
-        <a href="{% url 'logout' %}">Log out</a>
+        <div class="row">
+            {% csrf_token %}
+            <a href="{% url 'logout' %}">Log out</a>
+        </div>
+        <div class="row">
+            <h3>Eduware</h3>
+        </div>
+        
     </dl>
 </html>

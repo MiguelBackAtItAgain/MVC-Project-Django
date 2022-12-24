@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
+        <title>View challenges</title>
+        <meta name="description" content="View all challenges available.">
+        <meta name="viewport" content="width=device-width, initial'scale=1">
+        <link rel="stylesheet" href="../css/tables.css">
+    </head>
+    <body>
+            {% include 'partials/_control_pannel.html'%}
+            <a href="{% url 'createChallenge' %}?course={{ request.GET.course }}">Create a challenge for this class</a>
+    </body>
+</html>

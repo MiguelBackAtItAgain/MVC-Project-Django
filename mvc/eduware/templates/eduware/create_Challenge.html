@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Create challenge</title>
+        <meta name="description" content="Welcome to the teachers' homepage.">
+        <meta name="viewport" content="width=device-width, initial'scale=1">
+        <link rel="stylesheet" href="../css/tables.css">
+    </head>
+    <body>
+        {% include 'partials/_control_pannel.html'%}
+        <form method="POST" action="{% url 'createChallenge' %}?course={{ request.GET.course }}">
+            <div>
+                <tr>
+                    <h1>Create challenge</h1>
+                </tr>
+            </div>
+            <div>
+                {% csrf_token %}
+                <tr>
+                    {{ form.as_p }}
+                </tr>
+                <tr>
+                    <button>Create</button>
+                </tr>
+            </div>
+        </form>
+    </body>
+</html>

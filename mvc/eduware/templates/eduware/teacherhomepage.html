@@ -4,12 +4,32 @@
     <head>
         <meta charset="utf-8">
         <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Student's home page</title>
-        <meta name="description" content="Welcome to the students' homepage.">
+        <title>Teacher's home page</title>
+        <meta name="description" content="Welcome to the teachers' homepage.">
         <meta name="viewport" content="width=device-width, initial'scale=1">
+        <link rel="stylesheet" href="../css/tables.css">
     </head>
     <body>
         {% include 'partials/_control_pannel.html'%}
         <h1>Teacher's homepage</h1>
+        <table>
+                {% csrf_token %}
+                <tr>
+                    {% for var in teacher_course_data %}
+                    <div>
+                        <tr>{{var.coursenumber}} </tr>
+                        <tr>{{var.parallel}}</tr>
+                    </div>
+                    <div>
+                        <tr>{{var.subject.name}}</tr>
+                    </div>
+                    <div>
+                        <a href="{% url 'getChallenges' %}?course={{var.id}}">See available challenges</a>
+                    </div>
+                    {% endfor %}
+                </tr>
+        </table>
+        
+
     </body>
 </html>

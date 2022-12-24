@@ -11,7 +11,7 @@ def only_int(value):
 
 class UserManager(BaseUserManager):
     
-    def create_user(self, email, password, **extra_fields):        
+    def create_user(self, email, password, **extra_fields):   
         
         if not email:
             raise ValueError('The given email must be set')
@@ -103,7 +103,7 @@ class Course(models.Model):
         ordering = ['coursenumber']
 
     def __str__(self):
-        return self.subject + ', ' + self.coursenumber + ' ' + self.parallel
+        return f"{self.subject.name  + ' | ' + str(self.coursenumber) + ' ' + self.parallel + ' | ' + self.teacher.name}"
 
 
 class StudentCourse(models.Model):
@@ -115,6 +115,9 @@ class StudentCourse(models.Model):
 
     class Meta:
         ordering = ['id']
+
+    def __str__(self):
+        return f"{self.student.name, self.course.coursenumber}"
 
 class Challenge(models.Model):
     id = models.AutoField(primary_key=True)
@@ -128,11 +131,15 @@ class Challenge(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __str__(self):
+        return f"{self.title, self.description, str(self.begin_date), str(self.end_date)}"
+
 class Grade(models.Model):
     id = models.AutoField(primary_key=True)
     grade = models.FloatField()
     points = models.IntegerField()
     challenge = models.ForeignKey("Challenge", on_delete=models.CASCADE)
+
 
     class Meta:
         ordering = ['id']
