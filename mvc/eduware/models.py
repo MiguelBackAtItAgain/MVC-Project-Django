@@ -134,21 +134,22 @@ class Challenge(models.Model):
     def __str__(self):
         return f"{self.title, self.description, str(self.begin_date), str(self.end_date)}"
 
+class Solution(models.Model):
+    id = models.AutoField(primary_key=True)
+    answer = models.CharField(max_length=1000)
+    student_in_course = models.ForeignKey("StudentCourse", on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['id']
+
 class Grade(models.Model):
     id = models.AutoField(primary_key=True)
     grade = models.FloatField()
     points = models.IntegerField()
     challenge = models.ForeignKey("Challenge", on_delete=models.CASCADE)
-
-
-    class Meta:
-        ordering = ['id']
-
-class Solution(models.Model):
-    id = models.AutoField(primary_key=True)
-    answer = models.CharField(max_length=1000)
-    student_in_course = models.ForeignKey("StudentCourse", on_delete=models.CASCADE)
-    grade = models.ForeignKey("Grade", on_delete=models.CASCADE)
+    solution = models.ForeignKey("Solution", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ['id']
+
+

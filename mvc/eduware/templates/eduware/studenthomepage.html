@@ -25,7 +25,7 @@
                     <tr>{{var.course.teacher.name}}</tr>
                 </div>
                 <div>
-                    <a href="{% url 'getChallenges' coursenumber = coursenumber %}">See available challenges</a>
+                    <a href="{% url 'getChallengesStudents'%}?course={{var.course.id}} ">See available challenges</a>
                 </div>
                 </br>
                 {% endfor %}

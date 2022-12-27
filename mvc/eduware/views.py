@@ -64,7 +64,12 @@ def teacherLogin(request):
 def getChallenges(request):
     course = request.GET.get('course')
     course_challenges = Challenge.objects.filter(course_id = course)
-    return render(request, 'eduware/view_challenges.html', {'challenge_info' : course_challenges})
+    user = request.user
+    group = user.groups.all()[0].name
+    if group == "Teacher":
+        return render(request, 'eduware/view_challenges_t.html', {'challenge_info' : course_challenges})
+    elif group == "Student":
+        return render(request, 'eduware/view_challenges_s.html', {'challenge_info' : course_challenges})
 
 @login_required
 def createChallenge(request):
@@ -84,8 +89,6 @@ def createChallenge(request):
             return redirect('Error')
     else:
         return redirect('Error')
-   
-
 
 @login_required
 def logoutUser(request):

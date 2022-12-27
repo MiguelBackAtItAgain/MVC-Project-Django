@@ -7,6 +7,11 @@
                 <td>
                     <h3>Eduware</h3>
                 </td>
+                <style>
+                    table, th, td {
+                      border:1px solid black;
+                    }
+                </style>
                 <td>
                     {% csrf_token %}
                 <a href="{% url 'logout' %}">Log out</a>

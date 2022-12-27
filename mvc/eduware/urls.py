@@ -8,6 +8,7 @@ urlpatterns = [
     path('student/home', views.studentLogin, name='Student home page'),
     path('teacher/home', views.teacherLogin, name='Teacher home page'),
     path('error', views.error, name="Error"),
-    path('teacher/challenges', views.getChallenges, name='getChallenges'),
+    path('teacher/challenges', views.getChallenges, name='getChallengesTeachers'),
+    path('student/challenges', views.getChallenges, name='getChallengesStudents'),
     path('teacher/challenges/create_challenge', views.createChallenge, name='createChallenge')
 ]
