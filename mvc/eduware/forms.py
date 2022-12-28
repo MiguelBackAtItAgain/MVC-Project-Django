@@ -68,3 +68,24 @@ class ChallengeCreationForm(forms.ModelForm):
     class Meta:
         model = Challenge
         fields = ['title', 'description', 'answer', 'begin_date', 'end_date', 'course']
+
+class AddSolutionForm(forms.ModelForm):
+    answer = forms.TextInput()
+    student_in_course = forms.ModelChoiceField(queryset=StudentCourse.objects.all(), widget=forms.HiddenInput())
+    challenge = forms.ModelChoiceField(queryset=Challenge.objects.all(), widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        student_in_course_id = None
+        challenge_id = None
+        if 'student_in_course_id' in kwargs and 'challenge_id' in kwargs: 
+            student_in_course_id = kwargs.pop('student_in_course_id')
+            challenge_id = kwargs.pop('challenge_id')
+            if student_in_course_id and challenge_id:
+                self.fields['student_in_course'].initial = student_in_course_id
+                self.fields['challenge'].initial = challenge_id
+    
+    class Meta:
+        model = Solution
+        fields = ['answer', 'student_in_course', 'challenge']
+    
+        

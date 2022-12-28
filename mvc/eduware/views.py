@@ -70,6 +70,9 @@ def getChallenges(request):
         return render(request, 'eduware/view_challenges_t.html', {'challenge_info' : course_challenges})
     elif group == "Student":
         return render(request, 'eduware/view_challenges_s.html', {'challenge_info' : course_challenges})
+    else:
+        return render (request, 'eduware/teacherhomepage.html')
+
 
 @login_required
 def createChallenge(request):
@@ -81,14 +84,35 @@ def createChallenge(request):
                 form = ChallengeCreationForm(request.POST)
                 if form.is_valid():
                     form.save()
-                    return render(request, 'eduware/view_challenges.html')
+                    return redirect('Teacher home page')
             form = ChallengeCreationForm(course_id=request.GET.get('course'))
             context = {'form' : form}
-            return render(request, 'eduware/create_challenge.html', context)
+            return render(request, 'eduware/create_Challenge.html', context)
         else:
             return redirect('Error')
     else:
         return redirect('Error')
+
+
+@login_required
+def addSolution(request):
+    user = request.user
+    if user.groups.exists():
+        group = user.groups.all()[0].name
+        if group == 'Student':
+            if request.POST:
+                form = AddSolutionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return redirect('Student home page')
+            form = AddSolutionForm(student_in_course_id=request.GET.get('student_in_course'), challenge_id=request.GET.get('challlenge'))
+            challenge = Challenge.objects.get(id = request.GET.get('challenge'))
+            return render(request, 'eduware/add_solution.html', {'form' : form, 'challenge' : challenge })
+        else:
+            return redirect('Error')
+    else:
+        return redirect('Error')
+            
 
 @login_required
 def logoutUser(request):

@@ -27,7 +27,7 @@
                     <td>{{var.title}} </td>
                     <td>{{var.description}}</td>
                     <td>{{var.answer}}</td>
-                    <td><a href="#">Answer challenge</a></td>
+                    <td><a href="{% url 'addSolution' %}?student_in_course={{ var.id }}&challenge={{ var.id }}">Add solution</a></td>
                 </tr>
                 {% endfor %}
             </tr>
