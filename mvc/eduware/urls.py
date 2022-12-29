@@ -12,7 +12,9 @@ urlpatterns = [
     path('student/challenges', views.getChallenges, name='getChallengesStudents'),
     path('teacher/challenges/create_challenge', views.createChallenge, name='createChallenge'),
     path('student/challenge/add_solution', views.addSolution, name='addSolution'),
-    path('student/challenge/view_solutions', views.getSolutions, name='getSolutions'),
-    path('teacher/challenge/view_solutions', views.getSolutions, name='getSolutions'),
-    path('teacher/challenge/grade_challenge', views.gradeChallenge, name='gradeChallenge')
+    path('student/challenge/view_solutions', views.getSolutions, name='getSolutionsStudent'),
+    path('teacher/challenge/view_solutions', views.getSolutions, name='getSolutionsTeacher'),
+    path('teacher/challenge/grade_challenge', views.gradeChallenge, name='gradeChallenge'),
+    path('teacher/challenges/get_grades', views.getGrades, name='getGradesTeachers'),
+    path('student/challenges/get_grades', views.getGrades, name='getGradesStudents')
 ]

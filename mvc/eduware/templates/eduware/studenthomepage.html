@@ -31,6 +31,9 @@
                 <div>
                     <a href="{% url 'getChallengesStudents'%}?course={{var.course.id}} ">See available challenges</a>
                 </div>
+                <div>
+                    <a href="{% url 'getGradesStudents'%}?course={{var.course.id}} ">See grades for the challenges in this course</a>
+                </div>
                 </br>
                 {% endfor %}
             </tr>

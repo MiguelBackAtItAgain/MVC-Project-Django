@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Student's grades - Teacher's view</title>
+        <meta name="description" content="Welcome to the students' homepage.">
+        <meta name="viewport" content="width=device-width, initial'scale=1">
+    </head>
+    <body>
+        {% include 'partials/_control_pannel.html'%}
+        <div>
+            <table>
+                <tr>
+                    <th>Challenge title</th>
+                    <th>Challenge description</th>
+                    <th>Student's name</th>
+                    <th>Student's answer</th>
+                    <th>Right answer</th>
+                    <th>Grade given</th>
+                </tr>
+                <tr>
+                    {% for var in grade_info %}
+                    <tr>
+                        <td>{{var.challenge.title}}</td>
+                        <td>{{var.challenge.description}}</td>
+                        <td>{{var.solution.student_in_course.student.name}}</td>
+                        <td>{{var.solution.answer}}</td>
+                        <td>{{var.challenge.answer}}</td>
+                        <td>{{var.grade}}/100</td>
+                    </tr>
+                    {% endfor %}
+                </tr>
+            </table>
+            
+        </div>
+    </body>
+</html>

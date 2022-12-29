@@ -26,17 +26,9 @@
                     <td>{{var.title}} </td>
                     <td>{{var.description}}</td>
                     <td>
-                        {% for solution in solution_info %}
-                            {% if var.id == solution.challenge_id %}
-                                <a href="{% url 'getSolutions' %}?course={{ var.course.id }}&challenge={{ var.id }}">
-                                    <button>View submitted solution</button>
-                                </a>
-                            {% else %}
-                                <a href="{% url 'addSolution' %}?challenge={{ var.id }}">
-                                    <button>Add solution</button>
-                                </a>
-                            {% endif %}
-                        {% endfor %}
+                        <a href="{% url 'addSolution' %}?challenge={{ var.id }}">
+                            <button>Add solution</button>
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}

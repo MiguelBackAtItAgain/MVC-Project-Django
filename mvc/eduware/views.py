@@ -149,7 +149,11 @@ def gradeChallenge(request):
         group = user.groups.all()[0].name
         if group == 'Teacher':
             if request.POST:
-                form = gradeSolutionForm(request.POST)
+                request_with_points = request.POST.copy()
+                request_with_points.update(
+                    {'points' : int(request.POST.get('grade'))/10}
+                )
+                form = gradeSolutionForm(request_with_points)
                 if form.is_valid():
                     form.save()
                     return redirect('Teacher home page')
@@ -160,6 +164,28 @@ def gradeChallenge(request):
         else:
             return redirect('Error')
 
+@login_required
+def getGrades(request):
+    user = request.user
+    if user.groups.exists():
+        group = user.groups.all()[0].name
+        if group == 'Teacher':
+            challenges = Challenge.objects.filter(course_id=request.GET.get('course'))
+            challenge_ids = []
+            for i in challenges:
+                challenge_ids.append(i.id)
+            grades = Grade.objects.filter(challenge_id__in=challenge_ids)
+            context = {'grade_info' : grades}
+            return render(request, 'eduware/get_grades_t.html', context)
+        elif group == 'Student':
+            student_in_course = StudentCourse.objects.get(course_id = request.GET.get('course'), student_id = user.id)
+            solution = Solution.objects.filter(student_in_course_id = student_in_course.id)
+            solution_ids = []
+            for i in solution:
+                solution_ids.append(i.id)
+            grades = Grade.objects.filter(solution_id__in = solution_ids)
+            context = {'grade_info' : grades}
+            return render(request, 'eduware/get_grades_s.html', context)
 
 
 @login_required
