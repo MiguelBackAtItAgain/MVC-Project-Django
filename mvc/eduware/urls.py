@@ -11,5 +11,7 @@ urlpatterns = [
     path('teacher/challenges', views.getChallenges, name='getChallengesTeachers'),
     path('student/challenges', views.getChallenges, name='getChallengesStudents'),
     path('teacher/challenges/create_challenge', views.createChallenge, name='createChallenge'),
-    path('student/challenge/add_solution', views.addSolution, name='addSolution')
+    path('student/challenge/add_solution', views.addSolution, name='addSolution'),
+    path('student/challenge/view_solutions', views.getSolutions, name='getSolutions'),
+    path('teacher/challenge/view_solutions', views.getSolutions, name='getSolutions')
 ]

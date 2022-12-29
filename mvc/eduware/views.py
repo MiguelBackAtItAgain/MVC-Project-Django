@@ -69,9 +69,13 @@ def getChallenges(request):
     if group == "Teacher":
         return render(request, 'eduware/view_challenges_t.html', {'challenge_info' : course_challenges})
     elif group == "Student":
-        return render(request, 'eduware/view_challenges_s.html', {'challenge_info' : course_challenges})
+        student = User.objects.get(email = request.user)
+        student_in_course = StudentCourse.objects.get(student_id = student.id)
+        solution = Solution.objects.filter(student_in_course_id = student_in_course.id)
+        context = {'challenge_info' : course_challenges, 'solution_info' : solution}
+        return render(request, 'eduware/view_challenges_s.html', context)
     else:
-        return render (request, 'eduware/teacherhomepage.html')
+        return redirect('Error')
 
 
 @login_required
@@ -105,14 +109,30 @@ def addSolution(request):
                 if form.is_valid():
                     form.save()
                     return redirect('Student home page')
-            form = AddSolutionForm(student_in_course_id=request.GET.get('student_in_course'), challenge_id=request.GET.get('challlenge'))
+            student = User.objects.get(email = request.user)
+            student_in_course = StudentCourse.objects.get(student_id = student.id)
+            form = AddSolutionForm(student_in_course_id=student_in_course.id, challenge_id=request.GET.get('challenge'))
             challenge = Challenge.objects.get(id = request.GET.get('challenge'))
-            return render(request, 'eduware/add_solution.html', {'form' : form, 'challenge' : challenge })
+            context = {'form' : form, 'challenge' : challenge}
+            return render(request, 'eduware/add_solution.html', context)
         else:
             return redirect('Error')
     else:
         return redirect('Error')
             
+@login_required
+def getSolutions(request):
+    user = request.user
+    if user.groups.exists():
+        group = user.groups.all()[0].name
+        if group == 'Student':
+            student = User.objects.get(email = request.user)
+            student_in_course = StudentCourse.objects.get(student_id = student.id, course_id= request.GET.get('course'))
+            solution = Solution.objects.get(student_in_course_id=student_in_course.id, challenge_id=request.GET.get('challenge'))
+            context = {'solution_info' : solution}
+            return render(request, 'eduware/get_solutions_s.html', context)
+        elif group == 'Teacher':
+            pass
 
 @login_required
 def logoutUser(request):

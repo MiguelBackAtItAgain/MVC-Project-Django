@@ -17,7 +17,6 @@
                 <th>Parallel</th>
                 <th>Title</th>
                 <th>Description</th>
-                <th>Answer</th>
             </tr>
             <tr>
                 {% for var in challenge_info %}
@@ -26,11 +25,27 @@
                     <td>{{var.course.parallel}}</td>
                     <td>{{var.title}} </td>
                     <td>{{var.description}}</td>
-                    <td>{{var.answer}}</td>
-                    <td><a href="{% url 'addSolution' %}?student_in_course={{ var.id }}&challenge={{ var.id }}">Add solution</a></td>
+                    <td>
+                        {% for solution in solution_info %}
+                            {% if var.id == solution.challenge_id %}
+                                <a href="{% url 'getSolutions' %}?course={{ var.course.id }}&challenge={{ var.id }}">
+                                    <button>View submitted solution</button>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'addSolution' %}?challenge={{ var.id }}">
+                                    <button>Add solution</button>
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
                 </tr>
                 {% endfor %}
+                
             </tr>
         </table>
+        </br>
+        <div>
+            <a href="{% url 'Student home page' %}"><button>Return to main page</button></a>
+        </div>
     </body>
 </html>

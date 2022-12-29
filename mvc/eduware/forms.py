@@ -80,9 +80,10 @@ class AddSolutionForm(forms.ModelForm):
         if 'student_in_course_id' in kwargs and 'challenge_id' in kwargs: 
             student_in_course_id = kwargs.pop('student_in_course_id')
             challenge_id = kwargs.pop('challenge_id')
-            if student_in_course_id and challenge_id:
-                self.fields['student_in_course'].initial = student_in_course_id
-                self.fields['challenge'].initial = challenge_id
+        super(AddSolutionForm, self).__init__(*args, **kwargs)
+        if student_in_course_id and challenge_id:
+            self.fields['student_in_course'].initial = student_in_course_id
+            self.fields['challenge'].initial = challenge_id
     
     class Meta:
         model = Solution

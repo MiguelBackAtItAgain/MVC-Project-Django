@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
+        <title>See solution</title>
+        <meta name="description" content="See solution to challenge.">
+        <meta name="viewport" content="width=device-width, initial'scale=1">
+    </head>
+    <body>
+        {% include 'partials/_control_pannel.html'%}
+        <div>
+            <h4>Challenge name: {{solution_info.challenge.title}}</h4>
+        </div>
+        <div>
+            <p>Description: {{solution_info.challenge.description}}</p>
+        </div>
+        <div>
+            <p>Answer given: {{solution_info.answer}}</p>
+        </div>
+        <div>
+            <a href="{% url 'getChallengesStudents' %}?course={{ request.GET.course }}"><button>
+                Return
+            </button></a>
+        </div>
+    </body>
+</html>

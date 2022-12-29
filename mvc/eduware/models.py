@@ -143,6 +143,9 @@ class Solution(models.Model):
     class Meta:
         ordering = ['id']
 
+    def __str__(self):
+        return f"{self.student_in_course.student.name, self.challenge.title, self.answer}"
+
 class Grade(models.Model):
     id = models.AutoField(primary_key=True)
     grade = models.FloatField()

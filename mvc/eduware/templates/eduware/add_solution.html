@@ -22,22 +22,12 @@
             <p>{{ challenge.description }}</p>
         </div>
         <div>
-            <form method="POST" action="{% url 'addSolution' %}?student_in_course{{ request.GET.student_in_course }}&challenge={{ request.GET.challenge }}">
+            <form method="POST" action="{% url 'addSolution' %}?challenge={{ request.GET.challenge }}">
                 {% csrf_token %}
                 <table>
                     <tr>
                         <td>
-                            {{ form.answer }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ form.student_in_course }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ form.challenge }}
+                            {{ form.as_p }}
                         </td>
                     </tr>
                 </table>
