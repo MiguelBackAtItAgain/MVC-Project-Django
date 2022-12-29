@@ -132,7 +132,35 @@ def getSolutions(request):
             context = {'solution_info' : solution}
             return render(request, 'eduware/get_solutions_s.html', context)
         elif group == 'Teacher':
-            pass
+            challenges = Challenge.objects.filter(course_id =  request.GET.get('course'))
+            challenge_ids = []
+            for i in challenges:
+                challenge_ids.append(i.id)
+            solutions = Solution.objects.filter(challenge_id__in=challenge_ids)
+            context = {'solutions_list' : solutions}
+            return render(request, 'eduware/get_solutions_t.html', context)
+        else:
+            return redirect('Error')
+
+@login_required
+def gradeChallenge(request):
+    user = request.user
+    if user.groups.exists():
+        group = user.groups.all()[0].name
+        if group == 'Teacher':
+            if request.POST:
+                form = gradeSolutionForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return redirect('Teacher home page')
+            solution = Solution.objects.get(id=request.GET.get('solution'))
+            form = gradeSolutionForm(solution_id=solution.id, challenge_id=solution.challenge_id)
+            context = {'grade_form' : form, 'solution_info' : solution}
+            return render(request, 'eduware/grade_solution.html', context)
+        else:
+            return redirect('Error')
+
+
 
 @login_required
 def logoutUser(request):

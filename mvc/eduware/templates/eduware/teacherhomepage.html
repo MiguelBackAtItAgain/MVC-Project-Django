@@ -30,6 +30,9 @@
                                 <td>
                                     <a href="{% url 'getChallengesTeachers' %}?course={{var.id}}">See available challenges</a>
                                 </td>
+                                <td>
+                                    <a href="{% url 'getSolutions' %}?course={{var.id}}">View submitted solutions</a>
+                                </td>
                             </tr>
 
                     {% endfor %}

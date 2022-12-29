@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.core.validators import MaxValueValidator, MinValueValidator
 from .models import *
 
 User = get_user_model()
@@ -89,4 +90,23 @@ class AddSolutionForm(forms.ModelForm):
         model = Solution
         fields = ['answer', 'student_in_course', 'challenge']
     
-        
+class gradeSolutionForm(forms.ModelForm):
+    grade = forms.FloatField(validators=[MaxValueValidator(100.0), MinValueValidator(10.0)])
+    points = forms.IntegerField(validators=[MaxValueValidator(10), MinValueValidator(1)], widget=forms.HiddenInput())
+    challenge = forms.ModelChoiceField(queryset=Challenge.objects.all(), widget=forms.HiddenInput())
+    solution =forms.ModelChoiceField(queryset=Solution.objects.all(), widget=forms.HiddenInput())
+
+    def __init__(self, *args, **kwargs):
+        challenge_id = None
+        solution_id = None
+        if 'challenge_id' in kwargs and 'solution_id' in kwargs:
+            challenge_id = kwargs.pop('challenge_id')
+            solution_id = kwargs.pop('solution_id')
+        super(gradeSolutionForm, self).__init__(*args, **kwargs)
+        if challenge_id  and solution_id:
+            self.fields['challenge'].initial = challenge_id
+            self.fields['solution'].initial = solution_id
+
+    class Meta:
+        model = Grade
+        fields = ['grade', 'points', 'challenge', 'solution']

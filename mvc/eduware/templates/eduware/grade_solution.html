@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta hhtp-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Grade solution</title>
+        <meta name="description" content="See solution to challenges.">
+        <meta name="viewport" content="width=device-width, initial'scale=1">
+    </head>
+    <body>
+        {% include 'partials/_control_pannel.html'%}
+        <div>
+            <h1>Grade solution</h1>
+        </div>
+        <div>
+            <p>Challenge name: {{ solution_info.challenge.title }}</p>
+        </div>
+        <div>
+            <p>Description: {{ solution_info.challenge.description }}</p>
+        </div>
+        <div>
+            <p>Student's answer: {{ solution_info.answer }}</p>
+        </div>
+        <div>
+            <p>Right answer: {{ solution_info.challenge.answer }}</p>
+        </div>
+        <div>
+            <form method="POST" action="{% url 'gradeChallenge' %}?solution={{ request.GET.solution }}">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <td>
+                            {{ grade_form.as_p }}
+                        </td>
+                    </tr>
+                </table>
+                </br>
+                <button>Submit</button>
+            </form>
+        </div>
+    </body>
+</html>

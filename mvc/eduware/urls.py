@@ -13,5 +13,6 @@ urlpatterns = [
     path('teacher/challenges/create_challenge', views.createChallenge, name='createChallenge'),
     path('student/challenge/add_solution', views.addSolution, name='addSolution'),
     path('student/challenge/view_solutions', views.getSolutions, name='getSolutions'),
-    path('teacher/challenge/view_solutions', views.getSolutions, name='getSolutions')
+    path('teacher/challenge/view_solutions', views.getSolutions, name='getSolutions'),
+    path('teacher/challenge/grade_challenge', views.gradeChallenge, name='gradeChallenge')
 ]
