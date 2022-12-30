@@ -91,7 +91,7 @@ class AddSolutionForm(forms.ModelForm):
         fields = ['answer', 'student_in_course', 'challenge']
     
 class gradeSolutionForm(forms.ModelForm):
-    grade = forms.FloatField(validators=[MaxValueValidator(100.0), MinValueValidator(10.0)])
+    grade = forms.FloatField(validators=[MaxValueValidator(100.0), MinValueValidator(1.0)])
     points = forms.IntegerField(validators=[MaxValueValidator(10), MinValueValidator(1)], widget=forms.HiddenInput())
     challenge = forms.ModelChoiceField(queryset=Challenge.objects.all(), widget=forms.HiddenInput())
     solution =forms.ModelChoiceField(queryset=Solution.objects.all(), widget=forms.HiddenInput())
@@ -110,3 +110,6 @@ class gradeSolutionForm(forms.ModelForm):
     class Meta:
         model = Grade
         fields = ['grade', 'points', 'challenge', 'solution']
+
+
+

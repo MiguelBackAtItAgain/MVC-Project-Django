@@ -132,7 +132,7 @@ class Challenge(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return f"{self.title, self.description, str(self.begin_date), str(self.end_date)}"
+        return f"{self.title, self.description, str(self.begin_date), str(self.end_date), self.course.coursenumber + ' ' + self.course.parallel, self.course.subject.name}"
 
 class Solution(models.Model):
     id = models.AutoField(primary_key=True)

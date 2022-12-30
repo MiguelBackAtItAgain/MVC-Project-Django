@@ -33,6 +33,7 @@
                         <td>{{var.title}} </td>
                         <td>{{var.description}}</td>
                         <td>{{var.answer}}</td>
+                        <td><a href="{% url 'calculateDecils' %}?challenge={{var.id}}"><button>Calculate decils</button></a></td>
                     </tr>
                     {% endfor %}
                 </tr>

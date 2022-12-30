@@ -3,7 +3,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import *
+from collections import Counter
 from .forms import *
+import pandas as pd
 
 # Models start here
 
@@ -187,6 +189,47 @@ def getGrades(request):
             context = {'grade_info' : grades}
             return render(request, 'eduware/get_grades_s.html', context)
 
+@login_required
+def calculateDecils(request):
+    user = request.user
+    if user.groups.exists():
+        group = user.groups.all()[0].name
+        if group == 'Teacher':
+
+            solutions = Solution.objects.filter(challenge_id = request.GET.get('challenge'))
+            solution_ids = []
+            for i in solutions:
+                solution_ids.append(i.id)
+            
+            grades = Grade.objects.filter(solution_id__in = solution_ids)
+            grades_list = []
+
+            ranges = [range(0, 11, 1), range(10, 21, 1), range(20, 31, 1), range(30, 41, 1), range(40, 51, 1),
+                      range(50, 61, 1), range(60, 71, 1), range(70, 81, 1), range(80, 91, 1), range(90, 101, 1)]
+            
+
+            for i in grades:
+                grades_list.append(i.grade)
+
+            internal_grade_list = []
+            internal_occurrences_list = []
+            counter = Counter(grades_list)
+            for i in range(10, 101, 10):
+                internal_grade_list.append(i)
+                if counter.get(i) == None:
+                    internal_occurrences_list.append(0)
+                else:
+                    internal_occurrences_list.append(counter.get(i))
+
+            dframe = pd.DataFrame({ 'ranges' : ranges,
+                                    'grades' : internal_grade_list,
+                                    'f' :  internal_occurrences_list})
+            dframe['F'] = dframe['f'].cumsum()
+            positions = []
+            for i in range(1, 10, 1):
+                positions.append((i * sum(internal_occurrences_list))/10)
+            print(dframe)
+            return render(request, 'eduware/calculate_decils.html')
 
 @login_required
 def logoutUser(request):
