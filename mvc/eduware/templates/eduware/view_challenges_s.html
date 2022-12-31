@@ -27,7 +27,7 @@
                     <td>{{var.description}}</td>
                     <td>
                         {% if var.id in completed_challenges %}
-                            <a href="{% url 'getSolutionsStudent' %}?challenge={{ var.id }}">
+                            <a href="{% url 'getSolutionsStudent' %}?course={{ var.course.id }}&challenge={{var.id}}">
                                 <button>View solution</button>
                             </a>
                         {% else %}

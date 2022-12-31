@@ -139,7 +139,6 @@ def getSolutions(request):
         elif group == 'Teacher':
             challenges = Challenge.objects.filter(course_id =  request.GET.get('course'))
             challenge_ids = [challenge.id for challenge in challenges]
-            
             solutions = Solution.objects.filter(challenge_id__in=challenge_ids)
             solutions_ids = [solution.id for solution in solutions]
             grades = Grade.objects.filter(solution_id__in=solutions_ids)
@@ -255,7 +254,7 @@ def calculateDecils(request):
             decils = []
             for i in positions:
                 for j in range(0, 9, 1):
-                    if cumsum_list[j] <= i <= cumsum_list[j+1]:
+                    if cumsum_list[j] <= i < cumsum_list[j+1]:
                         first_row = dframe.iloc[j]
                         second_row = dframe.iloc[j+1]
                         amplitude = int(10)
@@ -266,10 +265,19 @@ def calculateDecils(request):
                         decil = Li + amplitude * (i - fi_min_1)/(fi - fi_min_1)
                         decils.append(decil)
             cleaned_decils = list(dict.fromkeys(decils))
-
+            students_in_decils = []
             for i in grades:
-                for j in range(0, 9, 1):
-                    pass
+                if i.grade > cleaned_decils[-1]:
+                    students_in_decils.append(f"{i.solution.student_in_course.student.name + ' is in centil 10'}")
+                elif i.grade < cleaned_decils[0]:
+                    students_in_decils.append(f"{i.solution.student_in_course.student.name + ' is in centil 1'}")
+                else:
+                    for j in range(0, 9, 1):
+                        if cleaned_decils[j] <= i.grade < cleaned_decils[j+1]:
+                            students_in_decils.append(f"{i.solution.student_in_course.student.name + ' is in centil ' + str(j+1) }")
+            aux = pd.DataFrame({'grades' : grades_list,
+                                'students_in_decils' : students_in_decils})
+            print(aux)
             return render(request, 'eduware/calculate_decils.html')
 
 @login_required
