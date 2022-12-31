@@ -201,10 +201,13 @@ def calculateDecils(request):
         if group == 'Teacher':
             # The solutions for a challenge are recovered and the ids are saved in a list for getting the grades
             solutions = Solution.objects.filter(challenge_id = request.GET.get('challenge'))
+            if len(solutions) < 10:
+                return redirect('decilsErrorView')
+            challenge = Challenge.objects.get(id = request.GET.get('challenge'))
             solution_ids = []
             for i in solutions:
                 solution_ids.append(i.id)
-            
+                
             #The grades are obtained based on the recovered solutions. A list of ranges is created for the dataframe
             #and the grades are saved to a list
             grades = Grade.objects.filter(solution_id__in = solution_ids)
@@ -249,8 +252,6 @@ def calculateDecils(request):
             # the formula used for this is the following:
             # decil(position) = Inferior limit (second row) + 
             # amplitude * (position - prev cumulative freq value(prev)/actual cumulative freq value - prev).
-            # As there are instances where a value could go through the loop more than one time and duplicate a decil,
-            # it is important for the list to be cleaned at the end.
             decils = []
             for i in positions:
                 for j in range(0, 9, 1):
@@ -264,21 +265,42 @@ def calculateDecils(request):
                         decil = 0
                         decil = Li + amplitude * (i - fi_min_1)/(fi - fi_min_1)
                         decils.append(decil)
-            cleaned_decils = list(dict.fromkeys(decils))
             students_in_decils = []
             for i in grades:
-                if i.grade > cleaned_decils[-1]:
+                if i.grade > decils[-1]:
                     students_in_decils.append(f"{i.solution.student_in_course.student.name + ' is in centil 10'}")
-                elif i.grade < cleaned_decils[0]:
+                elif i.grade < decils[0]:
                     students_in_decils.append(f"{i.solution.student_in_course.student.name + ' is in centil 1'}")
                 else:
                     for j in range(0, 9, 1):
-                        if cleaned_decils[j] <= i.grade < cleaned_decils[j+1]:
-                            students_in_decils.append(f"{i.solution.student_in_course.student.name + ' is in centil ' + str(j+1) }")
-            aux = pd.DataFrame({'grades' : grades_list,
-                                'students_in_decils' : students_in_decils})
-            print(aux)
-            return render(request, 'eduware/calculate_decils.html')
+                        if decils[j] <= i.grade < decils[j+1]:
+                            students_in_decils.append(f"{i.solution.student_in_course.student.name + ' is in centil ' + str(j+2) }")
+            students_in_decils = pd.DataFrame({'student_location' : students_in_decils,
+                                'grades' : grades_list
+                                })
+            divisions = []
+            i =0
+            while len(divisions) != 9:
+                if i == 0:
+                   divisions.append(f"{str(0) + ' - ' + str(decils[i])}")
+                   divisions.append(f"{str(decils[i]) + ' - ' + str(decils[i+1])}")
+                else:
+                   divisions.append(f"{str(decils[i]) + ' - ' + str(decils[i+1])}")
+                i = i+1
+            divisions.append(f"{str(decils[-1]) + ' - ' + str(100)}")
+            print(students_in_decils)
+
+            context ={'challenge_info' : challenge,
+                      'frequences_dataframe' : dframe,
+                      'decil_divisions' : divisions,
+                      'students_decils' : students_in_decils}
+            return render(request, 'eduware/calculate_decils.html', context)
+        else:
+            return redirect('Error')
+
+@login_required
+def decilsErrorView(request):
+    return render(request, 'eduware/data_error.html')
 
 @login_required
 def logoutUser(request):

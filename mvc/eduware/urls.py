@@ -17,5 +17,6 @@ urlpatterns = [
     path('teacher/challenge/grade_challenge', views.gradeChallenge, name='gradeChallenge'),
     path('teacher/challenges/get_grades', views.getGrades, name='getGradesTeachers'),
     path('student/challenges/get_grades', views.getGrades, name='getGradesStudents'),
-    path('teacher/decils', views.calculateDecils, name='calculateDecils')
+    path('teacher/decils', views.calculateDecils, name='calculateDecils'),
+    path('teacher/decils/error_view', views.decilsErrorView, name = 'decilsErrorView')
 ]

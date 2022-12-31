@@ -8,5 +8,67 @@
         <meta name="description" content="View all challenges available.">
         <meta name="viewport" content="width=device-width, initial'scale=1">
     </head>
-    
+    <body>
+        {% include 'partials/_control_pannel.html'%}
+        <div>
+            <h1>Decil calculation for student classification in {{challenge_info.course.subject.name}} |
+                {{challenge_info.course.coursenumber}} {{challenge_info.course.parallel}}</h1>
+        </div>
+        <h3>Frequency table</h3>
+        <div>
+            <table>
+                <tr>
+                    <th>Ranges</th>
+                    <th>Upper limit</th>
+                    <th>Frequence</th>
+                    <th>Cumulative frequence</th>
+                </tr>
+                <tr>
+                    {% for value in frequences_dataframe.itertuples %}
+                    <tr>
+                        <td>{{value.ranges}}</td>
+                        <td>{{value.grades}}</td>
+                        <td>{{value.f}}</td>
+                        <td>{{value.F}}</td>
+                    </tr>
+                    {% endfor%}
+                </tr>
+            </table>
+        </div>
+        <h3>Ranges calculated based on decils</h3>
+        <div>
+            <table>
+                <div>
+                    {% for var in decil_divisions %}
+                        <div>
+                            <td>
+                                <p>{{var}}</p>
+                            </td>
+                        </div>
+                    {% endfor %}
+                </div>
+            </table>
+        </div>
+        <h3>Students' location in ranges based on grades</h3>
+        <p>(with the 10th centil being the best)</p>
+        <div>
+            <table>
+                <tr>
+                    <th>Student's grade</th>
+                    <th>Student's classification</th>
+                </tr>
+                <tr>
+                    {% for value in students_decils.itertuples %}
+                    <tr>
+                        <td>{{value.grades}}</td>
+                        <td>{{value.student_location}}</td>
+                    </tr>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+        <div>
+            <a href="{% url 'Teacher home page' %}"><button>Go back to challenges</button></a>
+        </div>
+    </body>
 </html>
