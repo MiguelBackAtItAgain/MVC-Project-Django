@@ -26,9 +26,16 @@
                     <td>{{var.title}} </td>
                     <td>{{var.description}}</td>
                     <td>
-                        <a href="{% url 'addSolution' %}?challenge={{ var.id }}">
-                            <button>Add solution</button>
-                        </a>
+                        {% if var.id in completed_challenges %}
+                            <a href="{% url 'getSolutionsStudent' %}?challenge={{ var.id }}">
+                                <button>View solution</button>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'addSolution' %}?challenge={{ var.id }}">
+                                <button>Add solution</button>
+                            </a>
+                        {% endif %}
+                        
                     </td>
                 </tr>
                 {% endfor %}

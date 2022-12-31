@@ -27,7 +27,12 @@
                         <td>{{ var.student_in_course.student.name }}</td>
                         <td>{{ var.answer }}</td>
                         <td>{{ var.challenge.answer }}</td>
-                        <td><a href="{% url 'gradeChallenge' %}?solution={{var.id}}"><button>Grade solution</button></a></td>
+                        {% if var.student_in_course.student.id in graded_students %}
+                            <td><a href="#"><button disabled="true">Grade solution</button></a></td>
+                        {% else %}
+                            <td><a href="{% url 'gradeChallenge' %}?solution={{var.id}}"><button>Grade solution</button></a></td>
+                        {% endif %}
+                        
                     </tr>
                     {% endfor %}
                 </tr>

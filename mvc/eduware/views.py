@@ -72,9 +72,12 @@ def getChallenges(request):
         return render(request, 'eduware/view_challenges_t.html', {'challenge_info' : course_challenges})
     elif group == "Student":
         student = User.objects.get(email = request.user)
-        student_in_course = StudentCourse.objects.get(student_id = student.id)
+        student_in_course = StudentCourse.objects.get(student_id = student.id, course_id=course)
         solution = Solution.objects.filter(student_in_course_id = student_in_course.id)
-        context = {'challenge_info' : course_challenges, 'solution_info' : solution}
+        challenge_ids = [challenge.id for challenge in course_challenges]
+        completed_solutions = Solution.objects.filter(student_in_course_id = student_in_course.id, challenge_id__in = challenge_ids)
+        completed_challenges_ids = [solution.challenge_id for solution in completed_solutions]
+        context = {'challenge_info' : course_challenges, 'solution_info' : solution, 'completed_challenges': completed_challenges_ids}
         return render(request, 'eduware/view_challenges_s.html', context)
     else:
         return redirect('Error')
@@ -135,11 +138,13 @@ def getSolutions(request):
             return render(request, 'eduware/get_solutions_s.html', context)
         elif group == 'Teacher':
             challenges = Challenge.objects.filter(course_id =  request.GET.get('course'))
-            challenge_ids = []
-            for i in challenges:
-                challenge_ids.append(i.id)
+            challenge_ids = [challenge.id for challenge in challenges]
+            
             solutions = Solution.objects.filter(challenge_id__in=challenge_ids)
-            context = {'solutions_list' : solutions}
+            solutions_ids = [solution.id for solution in solutions]
+            grades = Grade.objects.filter(solution_id__in=solutions_ids)
+            graded_students = [grade.solution.student_in_course.student.id for grade in grades]
+            context = {'solutions_list' : solutions, 'graded_students': graded_students}
             return render(request, 'eduware/get_solutions_t.html', context)
         else:
             return redirect('Error')
@@ -262,8 +267,9 @@ def calculateDecils(request):
                         decils.append(decil)
             cleaned_decils = list(dict.fromkeys(decils))
 
-
-
+            for i in grades:
+                for j in range(0, 9, 1):
+                    pass
             return render(request, 'eduware/calculate_decils.html')
 
 @login_required
