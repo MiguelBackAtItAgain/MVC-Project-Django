@@ -195,25 +195,27 @@ def calculateDecils(request):
     if user.groups.exists():
         group = user.groups.all()[0].name
         if group == 'Teacher':
-
+            # The solutions for a challenge are recovered and the ids are saved in a list for getting the grades
             solutions = Solution.objects.filter(challenge_id = request.GET.get('challenge'))
             solution_ids = []
             for i in solutions:
                 solution_ids.append(i.id)
             
+            #The grades are obtained based on the recovered solutions. A list of ranges is created for the dataframe
+            #and the grades are saved to a list
             grades = Grade.objects.filter(solution_id__in = solution_ids)
             grades_list = []
-
             ranges = [range(0, 11, 1), range(10, 21, 1), range(20, 31, 1), range(30, 41, 1), range(40, 51, 1),
                       range(50, 61, 1), range(60, 71, 1), range(70, 81, 1), range(80, 91, 1), range(90, 101, 1)]
-            
-
             for i in grades:
                 grades_list.append(i.grade)
 
+            # To find how many times the grades are repeated, we make use of the counter function from python and 
+            # define two external lists for separating the grades and the frequence the grades were repeated without losing 
+            # the order.
+            counter = Counter(grades_list)
             internal_grade_list = []
             internal_occurrences_list = []
-            counter = Counter(grades_list)
             for i in range(10, 101, 10):
                 internal_grade_list.append(i)
                 if counter.get(i) == None:
@@ -221,14 +223,47 @@ def calculateDecils(request):
                 else:
                     internal_occurrences_list.append(counter.get(i))
 
+            # The dataframe is created and an extra column is created for the cumulative frequence.
             dframe = pd.DataFrame({ 'ranges' : ranges,
                                     'grades' : internal_grade_list,
                                     'f' :  internal_occurrences_list})
             dframe['F'] = dframe['f'].cumsum()
+            print(dframe)
+
+            # The cumulative sum is separated in a list to evaluate the nine positions for the decils.
+            # The positions are calculated with the folowing formula: kn/10
+            # k = number of decil/positions
+            # n = Sum of all frequencies 
+            cumsum_list = list(dframe['F'])
             positions = []
             for i in range(1, 10, 1):
                 positions.append((i * sum(internal_occurrences_list))/10)
-            print(dframe)
+            
+            # The decils are calculated going through the positions previously calculated and seeing if they
+            # are between two values of the cumulative frequence. If the condition is satisfied, the rows of each
+            # position are extracted to get the correspondent data that will be used to calculate each decil,
+            # the formula used for this is the following:
+            # decil(position) = Inferior limit (second row) + 
+            # amplitude * (position - prev cumulative freq value(prev)/actual cumulative freq value - prev).
+            # As there are instances where a value could go through the loop more than one time and duplicate a decil,
+            # it is important for the list to be cleaned at the end.
+            decils = []
+            for i in positions:
+                for j in range(0, 9, 1):
+                    if cumsum_list[j] <= i <= cumsum_list[j+1]:
+                        first_row = dframe.iloc[j]
+                        second_row = dframe.iloc[j+1]
+                        amplitude = int(10)
+                        fi_min_1 = int(first_row.F)
+                        fi = int(second_row.F)
+                        Li = int(second_row.ranges[0])
+                        decil = 0
+                        decil = Li + amplitude * (i - fi_min_1)/(fi - fi_min_1)
+                        decils.append(decil)
+            cleaned_decils = list(dict.fromkeys(decils))
+
+
+
             return render(request, 'eduware/calculate_decils.html')
 
 @login_required
