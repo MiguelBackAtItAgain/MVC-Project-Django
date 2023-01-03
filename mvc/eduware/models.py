@@ -103,7 +103,7 @@ class Course(models.Model):
     class Meta:
         ordering = ['coursenumber']
         constraints = [
-            models.UniqueConstraint(fields=['id', 'coursenumber', 'parallel', 'teacher', 'subject'], name='unique_course')
+            models.UniqueConstraint(fields=['coursenumber', 'parallel', 'teacher', 'subject'], name='unique_course')
         ]
 
     def __str__(self):
@@ -120,7 +120,7 @@ class StudentCourse(models.Model):
     class Meta:
         ordering = ['id']
         constraints = [
-            models.UniqueConstraint(fields=['id', 'student', 'course'], name='unique_student_in_course')
+            models.UniqueConstraint(fields=['student', 'course'], name='unique_student_in_course')
         ]
 
     def __str__(self):
@@ -137,9 +137,6 @@ class Challenge(models.Model):
 
     class Meta:
         ordering = ['id']
-        constraints = [
-            models.UniqueConstraint(fields=['id', 'course'], name='unique_challenge_per_course')
-        ]
 
     def __str__(self):
         return f"{self.title, self.description, str(self.begin_date), str(self.end_date), self.course.coursenumber + ' ' + self.course.parallel, self.course.subject.name}"
@@ -153,7 +150,7 @@ class Solution(models.Model):
     class Meta:
         ordering = ['id']
         constraints = [
-            models.UniqueConstraint(fields=['id', 'student_in_course', 'challenge'], name='unique_solution')
+            models.UniqueConstraint(fields=['student_in_course', 'challenge'], name='unique_solution')
         ]
 
     def __str__(self):
@@ -169,5 +166,5 @@ class Grade(models.Model):
     class Meta:
         ordering = ['id']
         constraints = [
-            models.UniqueConstraint(fields=['id', 'challenge', 'solution'], name='unique_grade_for_student')
+            models.UniqueConstraint(fields=['challenge', 'solution'], name='unique_grade_for_student')
         ]
