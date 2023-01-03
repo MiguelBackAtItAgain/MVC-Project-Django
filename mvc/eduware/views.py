@@ -255,7 +255,16 @@ def calculateDecils(request):
             decils = []
             for i in positions:
                 for j in range(0, 9, 1):
-                    if cumsum_list[j] <= i < cumsum_list[j+1]:
+                    if i < cumsum_list[j]:
+                        second_row = dframe.iloc[j]
+                        amplitude = int(10)
+                        fi_min_1 = 0
+                        fi = int(second_row.F)
+                        Li = 0
+                        decil = Li + amplitude * (i - fi_min_1)/(fi - fi_min_1)
+                        decils.append(decil)
+                        break
+                    elif cumsum_list[j] <= i < cumsum_list[j+1]:
                         first_row = dframe.iloc[j]
                         second_row = dframe.iloc[j+1]
                         amplitude = int(10)
@@ -265,6 +274,7 @@ def calculateDecils(request):
                         decil = 0
                         decil = Li + amplitude * (i - fi_min_1)/(fi - fi_min_1)
                         decils.append(decil)
+                        break
             students_in_decils = []
             for i in grades:
                 if i.grade > decils[-1]:

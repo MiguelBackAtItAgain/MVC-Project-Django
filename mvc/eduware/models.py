@@ -92,15 +92,19 @@ class Subject(models.Model):
 
 
 class Course(models.Model):
+    
     id = models.AutoField(primary_key=True)
     coursenumber = models.IntegerField()
     parallel = models.CharField(max_length=1)
-    teacher = models.ForeignKey("User", on_delete=models.CASCADE)
+    teacher = models.ForeignKey("User", on_delete=models.CASCADE, limit_choices_to={'groups__name' : "Teacher"})
     subject = models.ForeignKey("Subject", on_delete=models.CASCADE)
     max_students = models.IntegerField()
 
     class Meta:
         ordering = ['coursenumber']
+        constraints = [
+            models.UniqueConstraint(fields=['id', 'coursenumber', 'parallel', 'teacher', 'subject'], name='unique_course')
+        ]
 
     def __str__(self):
         return f"{self.subject.name  + ' | ' + str(self.coursenumber) + ' ' + self.parallel + ' | ' + self.teacher.name}"
@@ -108,16 +112,19 @@ class Course(models.Model):
 
 class StudentCourse(models.Model):
     id = models.AutoField(primary_key=True)
-    student = models.ForeignKey("User",  on_delete=models.CASCADE)
+    student = models.ForeignKey("User",  on_delete=models.CASCADE, limit_choices_to={'groups__name' : "Student"})
     course = models.ForeignKey("Course", on_delete=models.CASCADE)
     def __unicode__(self):
         return u'%s %s' 
 
     class Meta:
         ordering = ['id']
+        constraints = [
+            models.UniqueConstraint(fields=['id', 'student', 'course'], name='unique_student_in_course')
+        ]
 
     def __str__(self):
-        return f"{self.student.name, self.course.coursenumber}"
+        return f"{self.student.name, self.course.coursenumber, self.course.parallel}"
 
 class Challenge(models.Model):
     id = models.AutoField(primary_key=True)
@@ -130,6 +137,9 @@ class Challenge(models.Model):
 
     class Meta:
         ordering = ['id']
+        constraints = [
+            models.UniqueConstraint(fields=['id', 'course'], name='unique_challenge_per_course')
+        ]
 
     def __str__(self):
         return f"{self.title, self.description, str(self.begin_date), str(self.end_date), self.course.coursenumber + ' ' + self.course.parallel, self.course.subject.name}"
@@ -142,6 +152,9 @@ class Solution(models.Model):
 
     class Meta:
         ordering = ['id']
+        constraints = [
+            models.UniqueConstraint(fields=['id', 'student_in_course', 'challenge'], name='unique_solution')
+        ]
 
     def __str__(self):
         return f"{self.student_in_course.student.name, self.challenge.title, self.answer}"
@@ -155,5 +168,6 @@ class Grade(models.Model):
 
     class Meta:
         ordering = ['id']
-
-
+        constraints = [
+            models.UniqueConstraint(fields=['id', 'challenge', 'solution'], name='unique_grade_for_student')
+        ]
