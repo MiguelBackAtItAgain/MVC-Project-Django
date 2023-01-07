@@ -67,6 +67,22 @@
                 </tr>
             </table>
         </div>
+    </br>
+        <div>
+            <table>
+                <tr>
+                    <th>Amount of students per decil</th>
+                </tr>
+                <tr>
+                    {% for value in amount_of_students_in_decils %}
+                    <tr>
+                        <td>{{value}}</td>
+                    </tr>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+    </br>
         <div>
             <a href="{% url 'Teacher home page' %}"><button>Go back to home page</button></a>
         </div>

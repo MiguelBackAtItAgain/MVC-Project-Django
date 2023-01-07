@@ -207,7 +207,7 @@ def calculateDecils(request):
             solution_ids = []
             for i in solutions:
                 solution_ids.append(i.id)
-                
+            
             #The grades are obtained based on the recovered solutions. A list of ranges is created for the dataframe
             #and the grades are saved to a list
             grades = Grade.objects.filter(solution_id__in = solution_ids)
@@ -275,6 +275,7 @@ def calculateDecils(request):
                         decil = Li + amplitude * (i - fi_min_1)/(fi - fi_min_1)
                         decils.append(decil)
                         break
+            
             students_in_decils = []
             for i in grades:
                 if i.grade > decils[-1]:
@@ -300,10 +301,24 @@ def calculateDecils(request):
             divisions.append(f"{str(decils[-1]) + ' - ' + str(100)}")
             print(students_in_decils)
 
+            values_to_evaluate = decils
+            values_to_evaluate.append(100)
+            values_to_evaluate.insert(0, 0)
+            students_in_decils_nums = []
+            for i in range(len(positions)+1):
+                cont = 0
+                for j in grades_list:
+                    var = f"{'Students in decil ' + str(i+1) + ': '}"
+                    if values_to_evaluate[i] < j <= values_to_evaluate[i+1]:
+                        cont = cont + 1
+                    var += str(cont)
+                students_in_decils_nums.append(var)
+
             context ={'challenge_info' : challenge,
                       'frequences_dataframe' : dframe,
                       'decil_divisions' : divisions,
-                      'students_decils' : students_in_decils}
+                      'students_decils' : students_in_decils,
+                      'amount_of_students_in_decils' : students_in_decils_nums}
             return render(request, 'eduware/calculate_decils.html', context)
         else:
             return redirect('Error')
